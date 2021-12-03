@@ -1,18 +1,22 @@
 package com.zendesk.kunal;
 
+import com.ginsberg.junit.exit.ExpectSystemExit;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainTest {
 
-    public static String TEST_URL = "https://ENTER_URL.zendesk.com";
-    public static String TEST_USERNAME = "ENTER_USERNAME";
-    public static String TEST_PASSWORD = "ENTER_PASSWORD";
+    public static String TEST_URL = "";
+    public static String TEST_USERNAME = "";
+    public static String TEST_PASSWORD = "";
 
     @Test
+    @ExpectSystemExit
     void viewAllTicketsTest() {
         ByteArrayInputStream in = new ByteArrayInputStream(
                 (TEST_URL + "\n"
@@ -26,27 +30,36 @@ class MainTest {
                         + "\n"
                         + "3\n").getBytes());
         System.setIn(in);
-        assertDoesNotThrow(() -> {
-            Main.main(new String[]{});
-        });
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        Main.main(new String[]{});
+
+        assertTrue(out.toString().contains("Subject: voluptate dolor deserunt ea deserunt"));
+        assertTrue(out.toString().contains("Subject: officia magna velit nostrud ullamco"));
+        assertTrue(out.toString().contains("Subject: adipisicing duis quis consequat velit"));
+        assertTrue(out.toString().contains("Subject: in nostrud occaecat consectetur aliquip"));
     }
 
     @Test
+    @ExpectSystemExit
     void viewSingleTicketTest() {
         ByteArrayInputStream in = new ByteArrayInputStream(
                 (TEST_URL + "\n"
                         + TEST_USERNAME + "\n"
                         + TEST_PASSWORD + "\n"
                         + "2\n"
-                        + "1\n"
+                        + "25\n"
                         + "3\n").getBytes());
         System.setIn(in);
-        assertDoesNotThrow(() -> {
-            Main.main(new String[]{});
-        });
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+        Main.main(new String[]{});
+
+        assertTrue(out.toString().contains("Subject: voluptate dolor deserunt ea deserunt"));
     }
 
     @Test
+    @ExpectSystemExit
     void gracefulExceptionHandling() {
         ByteArrayInputStream in = new ByteArrayInputStream(
                 (TEST_URL + "\n"
@@ -56,12 +69,15 @@ class MainTest {
                         + "1\n"
                         + "3\n").getBytes());
         System.setIn(in);
-        assertDoesNotThrow(() -> {
-            Main.main(new String[]{});
-        });
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        Main.main(new String[]{});
+        assertTrue(out.toString().contains("Couldn't authenticate you"));
     }
 
     @Test
+    @ExpectSystemExit
     void invalidOptionValidOption() {
         ByteArrayInputStream in = new ByteArrayInputStream(
                 (TEST_URL + "\n"
@@ -72,9 +88,11 @@ class MainTest {
                         + "1\n"
                         + "3\n").getBytes());
         System.setIn(in);
-        assertDoesNotThrow(() -> {
-            Main.main(new String[]{});
-        });
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        Main.main(new String[]{});
+        assertTrue(out.toString().contains("Invalid choice, please choose again from the menu."));
     }
 
 }

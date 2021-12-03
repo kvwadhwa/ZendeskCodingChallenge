@@ -128,3 +128,15 @@ Ticket ID: 25; Creation time: Fri Dec 03 00:35:36 PST 2021; Requested by: null; 
 	
 Hit ENTER to continue.
 ```
+
+
+## Running Tests
+Step 0: Follow steps from Running Program
+Step 1: Open com/zendesk/kunal/MainTest.java and fill values for
+```
+    public static String TEST_URL = "";
+    public static String TEST_USERNAME = "";
+    public static String TEST_PASSWORD = "";
+```
+
+This test achieves 100% method coverage and 95%+ line coverage.
