@@ -23,6 +23,7 @@ public class Main {
             if (choice == 3) { break; }
             processChoice(choice);
         }
+        System.exit(0);
     }
 
     private static void setupScanner() {
